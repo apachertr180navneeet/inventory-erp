@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\SuperAdmin\DashboardController;
+use App\Http\Controllers\SuperAdmin\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +20,18 @@ use App\Http\Controllers\Admin\AdminAuthController;
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::prefix('superadmin')
+    ->middleware(['auth', 'role:Super Admin'])
+    ->name('superadmin.')
+    ->group(function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::resource('companies', CompanyController::class);
+
+});
 
 Route::name('admin.')->prefix('admin')->group(function () {
     Route::get('/', [AdminAuthController::class, 'index']);
