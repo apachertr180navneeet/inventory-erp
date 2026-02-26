@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,7 +14,7 @@ use Carbon\Carbon;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable ,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable ,SoftDeletes , HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -65,4 +66,8 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class);
+    }
 }
